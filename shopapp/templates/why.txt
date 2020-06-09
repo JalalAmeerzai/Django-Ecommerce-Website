@@ -1,0 +1,1 @@
+In templates folder, we add all our template files that we will be changing throughout the course of the project. these are dynajmic files
