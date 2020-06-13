@@ -69,8 +69,9 @@
                 <img src='/media/{{productItem.image}}' class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title">{{productItem.product_name}}</h5>
-                  <p class="card-text">{{productItem.desc}}</p>
+                  <p class="card-text">{{productItem.desc|slice:"0:50"}}...</p>
                   <button id="pr{{productItem.id}}" class="btn btn-primary cart">Add To Cart</button>
+                  <a href="shopapp/products/{{productItem.id}}"><button id="qv{{productItem.id}}" class="btn btn-primary">View</button></a>
                 </div>
               </div>
             </div>
@@ -104,29 +105,4 @@
 
  
  
- {%block jsCart%}
-  <script>
-    if(localStorage.getItem('cart') == null){
-      var cart = {};
-    }
-    else{
-      cart = JSON.parse(localStorage.getItem('cart'));
-      document.getElementById("cart").innerHTML = Object.keys(cart).length;
-    }
-    
-    $('.cart').click(function(){
-      var idstr = this.id.toString();
-      if (cart[idstr] !=undefined){
-        cart[idstr] = cart[idstr] + 1;
-      }
-      else{
-        cart[idstr] = 1;
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.getElementById("cart").innerHTML = Object.keys(cart).length;
-    });
-    //Initializing popover for cart
-    $('#popcart').popover();
-    document.getElementById("popcart").setAttribute('data-content', '<h5>Your Cart Items</h5>');
-  </script>
- {% endblock %}
+
