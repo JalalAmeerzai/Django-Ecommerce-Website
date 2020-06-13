@@ -77,7 +77,7 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
         }
         else{
           cart = JSON.parse(localStorage.getItem('cart'));
-          document.getElementById("cart").innerHTML = Object.keys(cart).length;
+          document.getElementById("cart").innerHTML = eval(Object.values(cart).join('+'))
         }
         
         $('.cart').click(function(){
@@ -89,7 +89,10 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
             cart[idstr] = 1;
           }
           localStorage.setItem('cart', JSON.stringify(cart));
-          document.getElementById("cart").innerHTML = Object.keys(cart).length;
+          //line below will just add the number of products
+          //document.getElementById("cart").innerHTML = Object.keys(cart).length;
+          //code below will add no of items in the cart instead of product
+          document.getElementById("cart").innerHTML = eval(Object.values(cart).join('+'))
         });
         //Initializing popover for cart
         $('#popcart').popover();
