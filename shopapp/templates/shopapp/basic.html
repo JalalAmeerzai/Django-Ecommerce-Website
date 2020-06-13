@@ -41,7 +41,7 @@
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
-    <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus
+    <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-timeout="2000" data-content="Vivamus
 sagittis lacus vel augue laoreet rutrum faucibus.">
       Cart(<span id="cart">0</span>)
     </button>
@@ -82,7 +82,7 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
         }
 
         // If the add to cart button is clicked, add/increment the item
-        $('.cart').bind( "click", function(){
+        $('.divpr').on('click', 'button.cart', function(){
           var idstr = this.id.toString();
           if (cart[idstr] !=undefined){
             cart[idstr] = cart[idstr] + 1;
@@ -91,11 +91,46 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
             cart[idstr] = 1;
           }
           updateCart(cart);
+          updatePopover(cart);
         });
 
         //Initializing popover for cart
         $('#popcart').popover();
-        document.getElementById("popcart").setAttribute('data-content', '<h5>Your Cart Items</h5>');
+        updatePopover(cart)
+        function updatePopover(cart)
+        {
+            
+            var popStr = "";
+            popStr = popStr + "<h6> Cart for your items in my shopping cart </h6><div class='mx-2 my-2'>";
+            var i = 1;
+            for (var item in cart){
+                popStr = popStr + "<b>" + i + "</b>. ";
+                popStr = popStr + document.getElementById('name' + item).innerHTML.slice(0, 19) + "... Qty: " + cart[item] + '<br>';
+                i = i+1;
+            }
+            popStr = popStr + "</div>" 
+            if(Object.keys(cart).length !== 0){
+              popStr = popStr + "</div> <a href='/checkout'><button class='btn btn-primary' id ='checkout'>Checkout</button></a> <button class='btn btn-primary' onclick='clearCart()' id ='clearCart'>Clear Cart</button>"
+            }
+            
+            document.getElementById('popcart').setAttribute('data-content', popStr);
+
+        }
+
+
+        //Clear Cart
+        function clearCart() {
+            cart = JSON.parse(localStorage.getItem('cart'));
+            for (var item in cart) {
+                document.getElementById('div' + item).innerHTML = '<button id="' + item + '" class="btn btn-primary cart">Add To Cart</button>'
+            }
+            localStorage.clear();
+            cart = {};
+            updatePopover(cart);
+            updateCart(cart);
+            $('#popcart').popover("hide");
+        }
+
 
         //UpdateCart Function
         function updateCart(cart) {
@@ -114,12 +149,8 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
               document.getElementById("cart").innerHTML = eval(Object.values(cart).join('+'))
             }
             
-            
         }
         // If plus or minus button is clicked, change the cart as well as the display value
-        
-        
-        
         $('.divpr').on("click", "button.minus", function() {
             a = this.id.slice(7, );
             cart['pr' + a] = cart['pr' + a] - 1;
@@ -129,18 +160,8 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
               delete cart['pr' + a]
               document.getElementById('divpr' + a).innerHTML = "<button id='pr"+a+"' class='btn btn-primary cart'>Add to Cart</button>"
               //re-adding the cart click functionality
-              $('.cart').unbind();
-              $('.cart').bind( "click", function(){
-                var idstr = this.id.toString();
-                if (cart[idstr] !=undefined){
-                  cart[idstr] = cart[idstr] + 1;
-                }
-                else{
-                  cart[idstr] = 1;
-                }
-                updateCart(cart);
-              });
             }
+            updatePopover(cart);
             updateCart(cart);
         });
         $('.divpr').on("click", "button.plus", function() {
@@ -148,6 +169,7 @@ sagittis lacus vel augue laoreet rutrum faucibus.">
             cart['pr' + a] = cart['pr' + a] + 1;
             document.getElementById('valpr' + a).innerHTML = cart['pr' + a];
             updateCart(cart);
+            updatePopover(cart);
         });
       </script>
     {% endblock %}

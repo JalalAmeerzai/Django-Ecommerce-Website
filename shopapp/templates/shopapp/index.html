@@ -68,7 +68,7 @@
               <div class="card align-items-center" style="width: 18rem;">
                 <img src='/media/{{productItem.image}}' class="card-img-top" alt="...">
                 <div class="card-body">
-                  <h5 class="card-title">{{productItem.product_name}}</h5>
+                  <h5 class="card-title" id="namepr{{productItem.id}}">{{productItem.product_name}}</h5>
                   <p class="card-text">{{productItem.desc|slice:"0:50"}}...</p>
                   <span id="divpr{{productItem.id}}" class="divpr">
                     <button id="pr{{productItem.id}}" class="btn btn-primary cart">Add To Cart</button>
