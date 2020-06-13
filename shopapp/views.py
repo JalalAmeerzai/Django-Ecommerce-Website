@@ -24,16 +24,16 @@ def about(request):
     return render(request, 'shopapp/about.html')
 
 def contact(request):
-    return render(request, 'shopapp/index.html')
+    return render(request, 'shopapp/contact.html')
 
 def tracker(request):
-    return render(request, 'shopapp/index.html')
+    return render(request, 'shopapp/tracker.html')
 
 def search(request):
-    return render(request, 'shopapp/index.html')
+    return render(request, 'shopapp/search.html')
 
 def productView(request):
-    return render(request, 'shopapp/index.html')
+    return render(request, 'shopapp/productview.html')
 
 def checkout(request):
-    return render(request, 'shopapp/index.html')
+    return render(request, 'shopapp/checkout.html')
