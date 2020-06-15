@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from .models import Product, Contact, Order
+from django.http import HttpResponse, JsonResponse
+from .models import Product, Contact, Order, OrderUpdate
 from math import ceil
+import json
 
 def index(request):
     #products = Product.objects.all() #This will fetch all the products
@@ -49,6 +50,24 @@ def contact(request):
 
 
 def tracker(request):
+
+    if request.method=="POST":
+        orderId = request.POST.get('orderId', '')
+        email = request.POST.get('email', '')
+        try:
+            order = Order.objects.filter(order_id=orderId, email=email)
+            if len(order)>0:
+                update = OrderUpdate.objects.filter(order_id=orderId)
+                updates = []
+                for item in update:
+                    updates.append({'text': item.update_desc, 'time': item.timestamp})
+                    response = json.dumps(updates, default=str)
+                return HttpResponse(response)
+            else:
+                return HttpResponse('{}')
+        except Exception as e:
+            return HttpResponse('{}')
+
     return render(request, 'shopapp/tracker.html')
 
 
@@ -87,6 +106,8 @@ def checkout(request):
             Message = 0
         else:
             order.save()
+            update = OrderUpdate(order_id=order.order_id, update_desc="Your order has been placed")
+            update.save()
             Message = 1
             id = order.order_id
 
