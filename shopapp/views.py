@@ -102,7 +102,7 @@ def checkout(request):
         phone = request.POST.get('phone', '')
         order = Order(items_json=items_json, name=name, email=email, address=address, city=city,
                        state=state, zip_code=zip_code, phone=phone)
-        if items_json =='':
+        if len(items_json) <= 0:
             Message = 0
         else:
             order.save()
