@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import Product, Contact, Order, OrderUpdate
 from math import ceil
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     #products = Product.objects.all() #This will fetch all the products
@@ -113,3 +114,11 @@ def checkout(request):
 
         return render(request, 'shopapp/checkout.html', {'id': id, "Message": Message})
     return render(request, 'shopapp/checkout.html')
+
+
+@csrf_exempt
+def productapi(request):
+    if request.method=="POST":
+        jalal = {'id': request.GET.get('id', ''), 'name': request.GET.get('name', '')}
+        products = Product.objects.all()
+        return HttpResponse(json.dumps(jalal,  default=str))

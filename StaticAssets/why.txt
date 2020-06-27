@@ -1,1 +1,0 @@
-static folder are a must for any django projects. in static folder we store our static files such as images and stuff that remains unchanged throughout the course of the project
