@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpRequest
 from .models import Product, Contact, Order, OrderUpdate
 from math import ceil
 import json
 from django.views.decorators.csrf import csrf_exempt
+import base64
 
 def index(request):
     #products = Product.objects.all() #This will fetch all the products
@@ -11,6 +12,7 @@ def index(request):
     #nSlides = n//4 + ceil((n/4)-(n//4))
     #params = {'no_of_slides':nSlides, 'range': range(1,nSlides),'products': products}
     
+
     allProds = []
     catprods = Product.objects.values('category', 'id')
     cats = {item['category'] for item in catprods}
@@ -116,9 +118,23 @@ def checkout(request):
     return render(request, 'shopapp/checkout.html')
 
 
-@csrf_exempt
+#@csrf_exempt
 def productapi(request):
-    if request.method=="POST":
-        jalal = {'id': request.GET.get('id', ''), 'name': request.GET.get('name', '')}
-        products = Product.objects.all()
-        return HttpResponse(json.dumps(jalal,  default=str))
+    if request.method=="GET":
+        #jalal = [{'id':'existing','name':'test user'}]
+        #jalal.append({'id': request.GET.get('id', ''), 'name': request.GET.get('name', '')})
+        #products = Product.objects.all()
+        #return HttpResponse(json.dumps(jalal,  default=str))
+        
+        #objectreturn = {}
+        #for i in range(1,4):
+            #obj = "obj"+str(i)
+            #objectreturn[obj] = {"id": i, "name": "test"+str(i)}
+        #objectreturn["obj"+str(request.GET.get('id', ''))] = {'id': request.GET.get('id', ''), 'name': request.GET.get('name', '')}
+        #return JsonResponse(objectreturn)
+        
+        #getting raw data in the form of json and converting it into json
+        dicts = json.loads(request.body) # to get the raw json data from request and convert it into a json or a dictionary   
+        return JsonResponse(dicts)
+
+        #return HttpResponse(len(request.body))
